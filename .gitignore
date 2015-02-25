@@ -1,9 +1,10 @@
+# exclude temp file
 *~
 Temp/
 obj/
+# exclude lib file
 Library/
-ProjectSettings/QualitySettings.asset
-Library/
+# but include important config file
 !Library/EditorBuildSettings.asset
 !Library/InputManager.asset
 !Library/ProjectSettings.asset
@@ -13,4 +14,10 @@ Library/
 !Library/AudioManager.asset
 !Library/DynamicsManager.asset
 !Library/NetworkManager.asset
+# exclude hot conflict
 ProjectSettings/QualitySettings.asset
+# exclude project file
+*.csproj
+*.sln
+*.userprefs
+*.DotSettings
