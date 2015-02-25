@@ -21,3 +21,6 @@ ProjectSettings/QualitySettings.asset
 *.sln
 *.userprefs
 *.DotSettings
+# exclude unityVS
+Assets/UnityVS/
+Assets/UnityVS.meta
