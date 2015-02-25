@@ -3,5 +3,6 @@
 # install unity, vs2013, (unityVS)
 # open unity project
 # (click "Assets" -> "Import Package" -> "UnityVS 2013", and import all)
+# (click "UnityVS" -> "Configuration", checkout "open scripts eith unityVS")
 # (click "UnityVS" -> "Generate Project Files", then you can edit script by VS2013)
 # open "scene/main.unity" and play, enjoy it!
