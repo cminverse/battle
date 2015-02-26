@@ -7,7 +7,7 @@ public class SoldierMoving : MonoBehaviour
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        agent = gameObject.AddComponent<NavMeshAgent>();
     }
 
 
