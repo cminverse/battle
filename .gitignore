@@ -19,6 +19,7 @@ ProjectSettings/QualitySettings.asset
 # exclude project file
 *.csproj
 *.sln
+*.suo
 *.userprefs
 *.DotSettings
 # exclude unityVS

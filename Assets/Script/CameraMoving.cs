@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-//cleanLevel = 0
+//cleanLevel = 0;
 public class CameraMoving : MonoBehaviour
 {
 
