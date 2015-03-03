@@ -519,16 +519,16 @@ namespace Model
 
     public class World
     {
-        private readonly Entity[] entity;
+        private readonly Entity[] entities;
         public World(params Entity[] entity)
         {
-            this.entity = entity;
+            this.entities = entity;
         }
         public void update()
         {
             while (true)
             {
-                foreach (Entity entity in this.entity)
+                foreach (Entity entity in this.entities)
                 {
                     entity.update();
                 }
