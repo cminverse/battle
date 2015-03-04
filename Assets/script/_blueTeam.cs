@@ -2,13 +2,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-//cleanLevel = 0;
+
 public class _blueTeam : MonoBehaviour {
 
-    private View.Troop<Marine> troop;
+    public Model.Troop<Marine> model;
+    public View.Troop<Marine> view;
 
 	void Start () {
-        troop = new View.Troop<Marine>(this.gameObject);
+        view = new View.Troop<Marine>(this.model, this.gameObject);
 	}
 
 	

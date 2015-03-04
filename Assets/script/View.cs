@@ -1,59 +1,40 @@
-﻿using Model;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace View
 {
     public class Troop<T>
-        where T : Soldier, new()
+        where T : Model.Soldier, new()
     {
-        public int ready_ = 0;
+        protected Model.Troop<T> model;
         public GameObject gameObject;
-        protected Model.Troop<T> troop;
 
-        public Troop(GameObject gameObject)
+        public Troop(Model.Troop<T> model, GameObject gameObject)
         {
-            this.troop = new Model.Troop<T>();
+            this.model = model;
+            this.gameObject = gameObject;
+            foreach (T childModel in model)
+            {
+                GameObject childObject = (GameObject)Object.Instantiate(Resources.Load("SoldierBlue"));
+                childObject.transform.parent = gameObject.transform;
+                childObject.AddComponent<_blueSoldier>().model = childModel;
+            }
         }
     }
 
-    public class Marine
+    public class Soldier
     {
-        public int ready_ = 0;
+        protected Model.Soldier model;
         public GameObject gameObject;
-        protected Model.Marine marine;
         
         public NavMeshAgent navMeshAgent;
 
-        public Marine(GameObject gameObject)
+        public Soldier(Model.Soldier model, GameObject gameObject)
         {
+            this.model = model;
             this.gameObject = gameObject;
-            marine = new Model.Marine();
-        }
-
-        void start()
-        {
-            System.Threading.Thread thread = new System.Threading.Thread(() => {
-                this.ready_ += 1;
-                this.navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
-                this.ready_ -= 1;
-            });
-            thread.Start();
-        }
-
-        void update()
-        {
-            if (this.ready_ != 0) return;
-
-        }
-    }
-
-    public class Test
-    {
-        public Test()
-        {
-
+            navMeshAgent = this.gameObject.AddComponent<NavMeshAgent>();
         }
     }
 }
