@@ -5,7 +5,9 @@ public class _god : MonoBehaviour
 {
     void Start()
     {
-        new View.Troop<Marine>(new Troop<Marine>(7), new GameObject("BlueTeam"));
+        GameObject blueTeam = new GameObject("BlueTeam");
+        Model.Troop<Marine> model = new Troop<Marine>(7);
+        blueTeam.AddComponent<_blueTeam>().model = model;
     }
 
     void Update()

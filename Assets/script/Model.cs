@@ -11,26 +11,37 @@ namespace Model
         }
 
         public Troop(int amount)
-            : base(amount)
+            : this()
         {
+            for (int i = 0; i < amount; i++)
+            {
+                this.list.Add(new T());
+            }
         }
 
-        public Troop(T[] soldiers)
-            : base(soldiers)
+        public Troop(T[] array)
+            : this()
         {
+            foreach (T item in array)
+            {
+                this.list.Add(item);
+            }
         }
 
         public Troop(List<T> list)
-            : base(list)
+            : this()
         {
+            this.list = list;
         }
     }
 
     public interface asTeam
     {
+        void lineUp();
+        void march(Position position);
     }
 
-    public class Team<T> : Crowd<T>//, asTeamMember Troops form Army
+    public class Team<T> : Crowd<T>, asTeam//, asTeamMember Troops form Army
         where T : Human, new()
     {
         public Team()
@@ -38,29 +49,50 @@ namespace Model
         }
 
         public Team(int amount)
-            : base(amount)
+            : this()
         {
+            for (int i = 0; i < amount; i++)
+            {
+                this.list.Add(new T());
+            }
         }
 
         public Team(T[] array)
-            : base(array)
+            : this()
         {
+            foreach (T item in array)
+            {
+                this.list.Add(item);
+            }
         }
 
         public Team(List<T> list)
-            : base(list)
+            : this()
         {
+            this.list = list;
         }
 
+        public virtual void lineUp()
+        {
+            foreach (T member in list)
+            {
+                ;
+            }
+        }
 
+        public virtual void march(Position position)
+        {
+
+        }
     }
 
     public interface asCrowd
     {
-
+        Position getDestination();
+        void setDestination(Position destination);
     }
 
-    public class Crowd<T> : Group<T>, hasStatusUnit
+    public class Crowd<T> : Group<T>, asStatusUnit
         where T : Creature, new()
     {
         public Crowd()
@@ -68,18 +100,37 @@ namespace Model
         }
 
         public Crowd(int amount)
-            : base(amount)
+            : this()
         {
+            for (int i = 0; i < amount; i++)
+            {
+                this.list.Add(new T());
+            }
         }
 
         public Crowd(T[] array)
-            : base(array)
+            : this()
         {
+            foreach (T item in array)
+            {
+                this.list.Add(item);
+            }
         }
 
         public Crowd(List<T> list)
-            : base(list)
+            : this()
         {
+            this.list = list;
+        }
+
+        Position destination = new Position();
+        public virtual Position getDestination()
+        {
+            return this.destination;
+        }
+        public virtual void setDestination(Position destination)
+        {
+            this.destination = destination;
         }
 
         public enum Status
@@ -131,21 +182,21 @@ namespace Model
             this.list = new List<T>();
         }
 
-        public Group(T[] array)
-            : this()
-        {
-            foreach (T item in array)
-            {
-                this.list.Add(item);
-            }
-        }
-
         public Group(int amount)
             : this()
         {
             for (int i = 0; i < amount; i++)
             {
                 this.list.Add(new T());
+            }
+        }
+
+        public Group(T[] array)
+            : this()
+        {
+            foreach (T item in array)
+            {
+                this.list.Add(item);
             }
         }
 
@@ -169,6 +220,13 @@ namespace Model
 
     public class Soldier : Human, asSoldier
     {
+        public Soldier()
+        {
+            this.setRadius(0.75f);
+            this.setSpeed(10f);
+            this.setAcceleration(100f);
+        }
+
         public new virtual void update()
         {
             base.update();
@@ -266,7 +324,7 @@ namespace Model
         void setImitateMember(Entity entity);
     }
 
-    public interface hasStatusUnit
+    public interface asStatusUnit
     {
         System.Enum getStatus();
         void setStatus(System.Enum status);
@@ -313,11 +371,11 @@ namespace Model
         }
     }
 
-    public class Creature : Entity, asCreature, asTeamMember, hasStatusUnit
+    public class Creature : Entity, asCreature, asTeamMember, asStatusUnit
     {
         public enum Status
         {
-            idle, battle, attack, suffer, guard, sneak, dead
+            idle, march, battle, attack, suffer, guard, sneak, dead
         }
 
         public enum Behavior

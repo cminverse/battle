@@ -7,7 +7,7 @@ namespace View
     public class Troop<T>
         where T : Model.Soldier, new()
     {
-        protected Model.Troop<T> model;
+        public Model.Troop<T> model;
         public GameObject gameObject;
 
         public Troop(Model.Troop<T> model, GameObject gameObject)
@@ -25,7 +25,7 @@ namespace View
 
     public class Soldier
     {
-        protected Model.Soldier model;
+        public Model.Soldier model;
         public GameObject gameObject;
         
         public NavMeshAgent navMeshAgent;
@@ -34,7 +34,16 @@ namespace View
         {
             this.model = model;
             this.gameObject = gameObject;
+
             navMeshAgent = this.gameObject.AddComponent<NavMeshAgent>();
+            navMeshAgent.radius = model.getRadius();
+            navMeshAgent.speed = model.getSpeed();
+            navMeshAgent.acceleration = model.getAcceleration();
+        }
+
+        public void update()
+        {
+            ;
         }
     }
 }

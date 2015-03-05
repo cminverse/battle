@@ -13,6 +13,7 @@ public class _blueSoldier : MonoBehaviour {
 
 	
 	void Update () {
+        view.update();
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
