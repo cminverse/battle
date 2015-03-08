@@ -29,7 +29,6 @@ namespace Model
         }
 
         public Troop(List<T> list)
-            : this()
         {
             this.list = list;
         }
@@ -37,8 +36,9 @@ namespace Model
 
     public interface asTeam
     {
+        void square();
         void lineUp();
-        void march(Position position);
+        void march(Position destination);
     }
 
     public class Team<T> : Crowd<T>, asTeam//, asTeamMember Troops form Army
@@ -67,32 +67,44 @@ namespace Model
         }
 
         public Team(List<T> list)
-            : this()
         {
             this.list = list;
         }
 
+        public virtual void square()
+        {
+
+        }
+
         public virtual void lineUp()
         {
+            T previousMember = null;
             foreach (T member in list)
             {
-                ;
+                if (previousMember == null)
+                {
+                    previousMember = member;
+                    continue;
+                }
+                member.setTowards(previousMember.getPosition());
+                member.setFollowMember(previousMember);
+                previousMember = member;
             }
         }
 
-        public virtual void march(Position position)
+        public virtual void march(Position destination)
         {
-
+            foreach (T member in list)
+            {
+                if (member.getFollowMember() == null)
+                {
+                    member.setDestination(destination);
+                }
+            }
         }
     }
 
-    public interface asCrowd
-    {
-        Position getDestination();
-        void setDestination(Position destination);
-    }
-
-    public class Crowd<T> : Group<T>, asStatusUnit
+    public class Crowd<T> : Group<T>, asStatusUnit, hasAgent
         where T : Creature, new()
     {
         public Crowd()
@@ -118,7 +130,6 @@ namespace Model
         }
 
         public Crowd(List<T> list)
-            : this()
         {
             this.list = list;
         }
@@ -238,8 +249,28 @@ namespace Model
 
     }
 
-    public class Human : Creature, asHuman
+    public class Human : Creature, asHuman, asTeamMember
     {
+        protected Entity followMember = null;
+        public virtual Entity getFollowMember()
+        {
+            return this.followMember;
+        }
+        public virtual void setFollowMember(Entity followMember)
+        {
+            this.followMember = followMember;
+        }
+
+        protected Entity imitateMember = null;
+        public virtual Entity getImitateMember()
+        {
+            return this.imitateMember;
+        }
+        public virtual void setImitateMember(Entity imitateMember)
+        {
+            this.imitateMember = imitateMember;
+        }
+
         public new virtual void update()
         {
             base.update();
@@ -371,7 +402,13 @@ namespace Model
         }
     }
 
-    public class Creature : Entity, asCreature, asTeamMember, asStatusUnit
+    public interface hasAgent
+    {
+        Position getDestination();
+        void setDestination(Position destination);
+    }
+
+    public class Creature : Entity, asCreature, asStatusUnit, hasAgent
     {
         public enum Status
         {
@@ -431,39 +468,19 @@ namespace Model
             this.age = age;
         }
 
-        protected Entity followMember = null;
-        public virtual Entity getFollowMember()
+        protected Position destination = null;
+        public virtual void setDestination(Position destination)
         {
-            return this.followMember;
+            this.destination = destination;
         }
-        public virtual void setFollowMember(Entity followMember)
+        public virtual Position getDestination()
         {
-            this.followMember = followMember;
-        }
-
-        protected Entity imitateMember = null;
-        public virtual Entity getImitateMember()
-        {
-            return this.imitateMember;
-        }
-        public virtual void setImitateMember(Entity imitateMember)
-        {
-            this.imitateMember = imitateMember;
+            return this.destination;
         }
 
         public new virtual void update()
         {
             base.update();
-            if (followMember != null)
-            {
-                this.setFaceTo(followMember.getPosition());
-                this.setTowards(followMember.getPosition());
-            }
-            if (imitateMember != null)
-            {
-                this.setFaceTo(imitateMember.getFaceTo());
-                this.setTowards(imitateMember.getTowards());
-            }
         }
     }
 
@@ -520,14 +537,14 @@ namespace Model
             this.position = position;
         }
 
-        protected Position faceTo = new Position();
-        public virtual Position getFaceTo()
+        protected Position towards = new Position();
+        public virtual Position getTowards()
         {
-            return this.faceTo;
+            return this.towards;
         }
-        public virtual void setFaceTo(Position faceTo)
+        public virtual void setTowards(Position towards)
         {
-            this.faceTo = faceTo;
+            this.towards = towards;
         }
 
         protected float radius = 0f;
@@ -558,16 +575,6 @@ namespace Model
         public virtual void setAcceleration(float acceleration)
         {
             this.acceleration = acceleration;
-        }
-
-        protected Position towards = new Position();
-        public virtual Position getTowards()
-        {
-            return this.towards;
-        }
-        public virtual void setTowards(Position towards)
-        {
-            this.towards = towards;
         }
 
         public virtual void update()
