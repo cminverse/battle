@@ -175,7 +175,6 @@ namespace Model
 
     public interface asGroup
     {
-
     }
 
     public class Group<T> : Entity, asGroup, IEnumerable
@@ -226,7 +225,7 @@ namespace Model
 
     public interface asSoldier
     {
-
+        
     }
 
     public class Soldier : Human, asSoldier
@@ -259,16 +258,6 @@ namespace Model
         public virtual void setFollowMember(Entity followMember)
         {
             this.followMember = followMember;
-        }
-
-        protected Entity imitateMember = null;
-        public virtual Entity getImitateMember()
-        {
-            return this.imitateMember;
-        }
-        public virtual void setImitateMember(Entity imitateMember)
-        {
-            this.imitateMember = imitateMember;
         }
 
         public new virtual void update()
@@ -351,8 +340,6 @@ namespace Model
     {
         Entity getFollowMember();
         void setFollowMember(Entity entity);
-        Entity getImitateMember();
-        void setImitateMember(Entity entity);
     }
 
     public interface asStatusUnit
