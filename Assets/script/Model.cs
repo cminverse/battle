@@ -70,10 +70,10 @@ namespace Model
         {
             this.list = list;
         }
-
+        
         public virtual void square()
         {
-
+            
         }
 
         public virtual void lineUp()
@@ -87,7 +87,7 @@ namespace Model
                     continue;
                 }
                 member.setTowards(previousMember.getPosition());
-                member.setFollowMember(previousMember);
+                member.setFrontMember(previousMember);
                 previousMember = member;
             }
         }
@@ -96,15 +96,56 @@ namespace Model
         {
             foreach (T member in list)
             {
-                if (member.getFollowMember() == null)
+                if (member.getFrontMember() == null)
                 {
                     member.setDestination(destination);
                 }
             }
         }
+
+        public override void gather()
+        {
+            if (list.Count != 0)
+        	{
+                setSurroundRelation();
+	        }
+        }
+
+        void setSurroundRelation()
+        {
+            T[] square = new T[(int)System.Math.Sqrt(list.Count) + 1];
+            int i = 0;
+            foreach (T member in list)
+            {
+                if (i != 0)
+                {
+                    member.setLeftMember(square[i-1]);
+                    square[i-1].setRightMember(member);
+                }
+                if (square[i] != null)
+                {
+                    member.setFrontMember(square[i]);
+                    square[i].setBehindMember(member);
+                }
+                square[i] = member;
+                if (++i == square.GetLength(0))
+                    i = 0;
+            }
+        }
+
+        public override void gather(Rect rect)
+        {
+            ;
+        }
     }
 
-    public class Crowd<T> : Group<T>, asStatusUnit, hasAgent
+    public interface asCrowd
+    {
+        void gather();
+        void gather(Rect rect);
+    }
+
+    public class Crowd<T> : Group<T>, asCrowd, asStatusUnit, hasAgent
         where T : Creature, new()
     {
         public Crowd()
@@ -171,13 +212,30 @@ namespace Model
         {
             this.status.setBehavior(behavior);
         }
+
+        public virtual void gather()
+        {
+            this.gather(new Rect());
+        }
+
+        public virtual void gather(Rect rect)
+        {
+            ;
+        }
     }
 
     public interface asGroup
     {
     }
 
-    public class Group<T> : Entity, asGroup, IEnumerable
+    public interface asRect
+    {
+        void setVertex(Rect vertex);
+        Rect getVertex();
+        Position getCenter();
+    }
+
+    public class Group<T> : Entity, asGroup, IEnumerable, asRect
         where T : Entity, new()
     {
         protected List<T> list;
@@ -213,6 +271,27 @@ namespace Model
         public Group(List<T> list)
         {
             this.list = list;
+        }
+
+        protected Rect vertex = new Rect();
+        public virtual void setVertex(Rect vertex)
+        {
+            this.vertex = vertex;
+        }
+        public virtual Rect getVertex()
+        {
+            return this.vertex;
+        }
+        public virtual Position getCenter()
+        {
+            float x=0, y=0, z=0;
+            foreach (Position point in vertex)
+            {
+                x += ((UnityEngine.Vector3)point).x;
+                y += ((UnityEngine.Vector3)point).y;
+                z += ((UnityEngine.Vector3)point).z;
+            }
+            return new Position(x, y, z);
         }
     }
 
@@ -250,14 +329,44 @@ namespace Model
 
     public class Human : Creature, asHuman, asTeamMember
     {
-        protected Entity followMember = null;
-        public virtual Entity getFollowMember()
+        protected Human frontMember = null;
+        public virtual Human getFrontMember()
         {
-            return this.followMember;
+            return this.frontMember;
         }
-        public virtual void setFollowMember(Entity followMember)
+        public virtual void setFrontMember(Human frontMember)
         {
-            this.followMember = followMember;
+            this.frontMember = frontMember;
+        }
+
+        protected Human leftMember = null;
+        public virtual Human getLeftMember()
+        {
+            return this.leftMember;
+        }
+        public virtual void setLeftMember(Human leftMember)
+        {
+            this.leftMember = leftMember;
+        }
+
+        protected Human rightMember = null;
+        public virtual Human getRightMember()
+        {
+            return this.rightMember;
+        }
+        public virtual void setRightMember(Human rightMember)
+        {
+            this.rightMember = rightMember;
+        }
+
+        protected Human behindMember = null;
+        public virtual Human getBehindMember()
+        {
+            return this.behindMember;
+        }
+        public virtual void setBehindMember(Human behindMember)
+        {
+            this.behindMember = behindMember;
         }
 
         public new virtual void update()
@@ -338,8 +447,14 @@ namespace Model
 
     public interface asTeamMember
     {
-        Entity getFollowMember();
-        void setFollowMember(Entity entity);
+        Human getFrontMember();
+        void setFrontMember(Human front);
+        Human getLeftMember();
+        void setLeftMember(Human left);
+        Human getRightMember();
+        void setRightMember(Human right);
+        Human getBehindMember();
+        void setBehindMember(Human behind);
     }
 
     public interface asStatusUnit
@@ -468,6 +583,40 @@ namespace Model
         public new virtual void update()
         {
             base.update();
+        }
+    }
+
+    public class Rect : IEnumerable
+    {
+        Position[] vertex;
+
+        public IEnumerator GetEnumerator()
+        {
+            return this.vertex.GetEnumerator();
+        }
+
+        public Rect()
+            : this(new Position[4] { new Position(), new Position(), new Position(), new Position() })
+        {
+        }
+
+        public Rect(Position[] vertex)
+        {
+            this.vertex = vertex;
+        }
+
+        public Rect(Position vertex1, Position vertex2, Position center)
+        {
+            UnityEngine.Vector3 vector1 = ((UnityEngine.Vector3)vertex1);
+            UnityEngine.Vector3 vector2 = ((UnityEngine.Vector3)vertex2);
+            Position vertex3 = new Position(((UnityEngine.Vector3)center*2 - vector1));
+            Position vertex4 = new Position(((UnityEngine.Vector3)center*2 - vector2));
+            this.vertex = new Position[4] { vertex1, vertex2, vertex3, vertex4};
+        }
+
+        public static implicit operator Position[](Rect rect)
+        {
+            return rect.vertex;
         }
     }
 

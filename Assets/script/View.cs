@@ -22,9 +22,15 @@ namespace View
             }
         }
 
+        public void square( )
+        {
+            
+        }
+
         public void march(Model.Position destination)
         {
             model.lineUp();
+            //model.gather();
             model.march(destination);
         }
 
@@ -58,8 +64,8 @@ namespace View
             this.model.setPosition(new Model.Position(this.gameObject.transform.position));
             if (this.model.getDestination() != null)
                 this.navMeshAgent.SetDestination(this.model.getDestination());
-            else if (this.model.getFollowMember() != null)
-                this.navMeshAgent.SetDestination(this.model.getFollowMember().getPosition());
+            else if (this.model.getFrontMember() != null)
+                this.navMeshAgent.SetDestination(this.model.getFrontMember().getPosition());
 
             if (navMeshAgent.remainingDistance < 2.5f * model.getRadius())
             {

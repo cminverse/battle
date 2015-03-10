@@ -1,5 +1,4 @@
-﻿using Model;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class _god : MonoBehaviour
 {
@@ -7,12 +6,12 @@ public class _god : MonoBehaviour
     {
         {
             GameObject blueTeam = new GameObject("BlueTeam");
-            Model.Troop<Marine> model = new Troop<Marine>(6);
+            Model.Troop<Model.Marine> model = new Model.Troop<Model.Marine>(6);
             blueTeam.AddComponent<_blueTeam>().model = model;
         }
         {
             GameObject blueTeam = new GameObject("BlueTeam");
-            Model.Troop<Marine> model = new Troop<Marine>(6);
+            Model.Troop<Model.Marine> model = new Model.Troop<Model.Marine>(6);
             blueTeam.AddComponent<_blueTeam>().model = model;
         }
     }
