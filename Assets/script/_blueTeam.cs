@@ -30,7 +30,6 @@ public class _blueTeam : MonoBehaviour {
 	}
 
 
-    //LineRenderer
     GameObject target;
     private LineRenderer lineRenderer;
     Vector3 startPoint;
@@ -39,8 +38,6 @@ public class _blueTeam : MonoBehaviour {
     int amount = 0;
     List<GameObject> list = new List<GameObject>();
 
-
-    // Use this for initialization
     void targetStart()
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -52,7 +49,6 @@ public class _blueTeam : MonoBehaviour {
         target.transform.parent = this.transform;
     }
 
-    // Update is called once per frame
     void targetUpdate()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -76,23 +72,32 @@ public class _blueTeam : MonoBehaviour {
                 this.magnitude = (endPoint - startPoint).magnitude;
                 Model.Soldier soldier = new Model.Soldier();
                 this.amount = (int)(this.magnitude / (soldier.getRadius() + soldier.getInterspace()) / 2 + 1);
-                if (list.Count != this.amount)
+                if (list.Count != this.model.getAmount())
                 {
-                    for (int i = list.Count; i < this.amount; i++)
+                    for (int i = list.Count; i < this.model.getAmount(); i++)
                     {
                         GameObject childObject = (GameObject)Object.Instantiate(Resources.Load("SoldierRed"));
                         childObject.transform.parent = this.target.transform;
                         list.Add(childObject);
                     }
                 }
-                for (int i = 0; i < this.amount; i++)
-                {
-                    list[i].transform.position = startPoint + i * (endPoint - startPoint).normalized * (soldier.getInterspace() + soldier.getRadius()) * 2;
-                    list[i].SetActive(true);
-                }
-                for (int i = this.amount; i < list.Count; i++)
-                {
-                    list[i].SetActive(false);
+                //for (int i = 0; i < this.amount; i++)
+                //{
+                //    list[i].transform.position = startPoint + i * (endPoint - startPoint).normalized * (soldier.getInterspace() + soldier.getRadius()) * 2;
+                //    list[i].SetActive(true);
+                //}
+                //for (int i = this.amount; i < list.Count; i++)
+                //{
+                //    list[i].SetActive(false);
+                //}
+
+                int column = list.Count / this.amount + 1;
+                Vector3 temp = Vector3.Cross(Vector3.Cross(endPoint, startPoint), endPoint - startPoint).normalized;
+                Vector3 offset = temp * (soldier.getInterspace() + soldier.getRadius()) * 2;
+
+                for (int i = 0; i < list.Count; i++)
+			    {
+                    list[i].transform.position = startPoint + offset * (i / this.amount) + 2 * (i % this.amount) * (endPoint - startPoint).normalized * (soldier.getInterspace() + soldier.getRadius());
                 }
             }
         }
