@@ -314,6 +314,7 @@ namespace Model
             this.setRadius(0.75f);
             this.setSpeed(10f);
             this.setAcceleration(100f);
+            this.setInterspace(0.25f * this.getRadius());
         }
 
         public new virtual void update()
@@ -657,6 +658,8 @@ namespace Model
         void setSpeed(float speed);
         float getAcceleration();
         void setAcceleration(float acceleration);
+        float getInterspace();
+        void setInterspace(float interspace);
 
         void update();
     }
@@ -711,6 +714,16 @@ namespace Model
         public virtual void setAcceleration(float acceleration)
         {
             this.acceleration = acceleration;
+        }
+
+        protected float interspace = 0f;
+        public virtual float getInterspace()
+        {
+            return this.interspace;
+        }
+        public virtual void setInterspace(float interspace)
+        {
+            this.interspace = interspace;
         }
 
         public virtual void update()

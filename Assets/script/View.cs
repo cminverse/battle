@@ -56,7 +56,7 @@ namespace View
             navMeshAgent.radius = model.getRadius();
             navMeshAgent.speed = model.getSpeed();
             navMeshAgent.acceleration = model.getAcceleration();
-            navMeshAgent.stoppingDistance = 2.5f * model.getRadius();
+            navMeshAgent.stoppingDistance = 2.0f * (model.getRadius() + model.getInterspace());
         }
 
         public void update()
@@ -67,7 +67,7 @@ namespace View
             else if (this.model.getFrontMember() != null)
                 this.navMeshAgent.SetDestination(this.model.getFrontMember().getPosition());
 
-            if (navMeshAgent.remainingDistance < 2.5f * model.getRadius())
+            if (navMeshAgent.remainingDistance < 2.0f * (model.getRadius() + model.getInterspace()))
             {
                 this.gameObject.animation.Play("Idle");
             }
