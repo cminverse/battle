@@ -36,7 +36,7 @@ namespace Model
 
     public interface asTeam
     {
-        void square();
+        void square(Rect rect);
         void lineUp();
         void march(Position destination);
     }
@@ -70,10 +70,42 @@ namespace Model
         {
             this.list = list;
         }
-        
-        public virtual void square()
+
+        //zhengxing
+        //Position should be as powerful as Vector3
+        public virtual void square(Rect rect)
         {
-            
+            Position frontFirst = ((Position[])rect)[0];
+            Position frontLast = ((Position[])rect)[1];
+            Position behindFirst = ((Position[])rect)[2];
+            Position lastOne = ((Position[])rect)[3];
+
+            Position horizonUnit = new Position(((((UnityEngine.Vector3)frontLast - (UnityEngine.Vector3)frontFirst)).normalized));
+            Position verticalUnit = new Position(((((UnityEngine.Vector3)behindFirst - (UnityEngine.Vector3)frontFirst)).normalized));
+
+            int i = 0, j = 0;
+            foreach (T member in list)
+            {
+                float scale = (member.getRadius() + member.getInterspace()) * 2;
+                Position horizonStep = new Position((UnityEngine.Vector3)horizonUnit * scale);
+                Position verticalStep = new Position((UnityEngine.Vector3)verticalUnit * scale);
+
+                Position horizon = new Position((UnityEngine.Vector3)horizonStep * i++);
+                Position vertical = new Position((UnityEngine.Vector3)verticalStep * j);
+
+                bool horizonOutBoundFlag = UnityEngine.Vector3.Dot((UnityEngine.Vector3)frontLast - (UnityEngine.Vector3)frontFirst - (UnityEngine.Vector3)horizon, horizon) < 0;
+                
+                if (!horizonOutBoundFlag)
+                {
+                    member.setDestination(new Position((UnityEngine.Vector3)frontFirst + (UnityEngine.Vector3)horizon + (UnityEngine.Vector3)vertical));
+                }
+                else
+                {
+                    i = 0;
+                    j++;
+                    member.setDestination(new Position((UnityEngine.Vector3)frontFirst + (UnityEngine.Vector3)horizonStep * i + (UnityEngine.Vector3)verticalStep * j));
+                }
+            }
         }
 
         public virtual void lineUp()
@@ -311,10 +343,10 @@ namespace Model
     {
         public Soldier()
         {
-            this.setRadius(0.75f);
+            this.setRadius(0.5f);
             this.setSpeed(10f);
             this.setAcceleration(100f);
-            this.setInterspace(0.25f * this.getRadius());
+            this.setInterspace(1.0f * this.getRadius());
         }
 
         public new virtual void update()
