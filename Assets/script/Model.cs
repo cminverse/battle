@@ -258,6 +258,7 @@ namespace Model
 
     public interface asGroup
     {
+        int getAmount();
     }
 
     public interface asRect
@@ -303,6 +304,11 @@ namespace Model
         public Group(List<T> list)
         {
             this.list = list;
+        }
+
+        public virtual int getAmount()
+        {
+            return list.Count;
         }
 
         protected Rect vertex = new Rect();

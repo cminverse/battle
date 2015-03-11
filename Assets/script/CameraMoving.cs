@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraMoving : MonoBehaviour
 {
 
-    private Transform hitTransform;
+    //private Transform hitTransform;
 
     // Use this for initialization
     void Start()
