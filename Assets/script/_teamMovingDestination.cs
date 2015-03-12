@@ -33,7 +33,8 @@ public class _teamMovingDestination : MonoBehaviour
             startPoint = hit.point;
         }
     }
-
+    //wuxia
+    //vector.cross should be more readable
     void mousePress()
     {
         if (Input.GetMouseButton(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit) && hit.collider.name.Equals("Terrain"))
