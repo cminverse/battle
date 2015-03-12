@@ -6,7 +6,7 @@ public class _god : MonoBehaviour
     {
         {
             GameObject blueTeam = new GameObject("BlueTeam");
-            Model.Troop<Model.Marine> model = new Model.Troop<Model.Marine>(12);
+            Model.Troop<Model.Marine> model = new Model.Troop<Model.Marine>(64);
             blueTeam.AddComponent<_blueTeam>().model = model;
         }
     }

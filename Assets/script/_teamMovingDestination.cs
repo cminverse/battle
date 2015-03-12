@@ -51,11 +51,13 @@ public class _teamMovingDestination : MonoBehaviour
                 }
             }
 
-            int temp = 1 + (int)(dragVector.magnitude / unitSize);
+            int temp = 1 + (int)(dragVector.magnitude / unitSize) < 3 ? 3 : 1 + (int)(dragVector.magnitude / unitSize);
             formationWidth = temp > list.Count ? list.Count : temp;
             formationDepth = (list.Count - 1) / formationWidth + 1;
 
-            Vector3 offset = Vector3.Cross(Vector3.Cross(endPoint, startPoint), dragVector).normalized * unitSize;
+            Vector3 cross = Vector3.Cross(endPoint, startPoint);
+            cross.y = -System.Math.Abs(cross.y);
+            Vector3 offset = Vector3.Cross(cross, dragVector).normalized * unitSize;
 
             for (int i = 0; i < list.Count; i++)
             {

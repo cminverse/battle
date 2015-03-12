@@ -93,7 +93,7 @@ namespace Model
                 Position horizon = new Position((UnityEngine.Vector3)horizonStep * i++);
                 Position vertical = new Position((UnityEngine.Vector3)verticalStep * j);
 
-                bool horizonOutBoundFlag = UnityEngine.Vector3.Dot((UnityEngine.Vector3)frontLast - (UnityEngine.Vector3)frontFirst - (UnityEngine.Vector3)horizon, horizon) < 0;
+                bool horizonOutBoundFlag = UnityEngine.Vector3.Dot((UnityEngine.Vector3)frontLast - (UnityEngine.Vector3)frontFirst - (UnityEngine.Vector3)horizon, horizon) < - 0.01;
                 
                 if (!horizonOutBoundFlag)
                 {
@@ -103,7 +103,7 @@ namespace Model
                 {
                     i = 0;
                     j++;
-                    member.setDestination(new Position((UnityEngine.Vector3)frontFirst + (UnityEngine.Vector3)horizonStep * i + (UnityEngine.Vector3)verticalStep * j));
+                    member.setDestination(new Position((UnityEngine.Vector3)frontFirst + (UnityEngine.Vector3)horizonStep * i++ + (UnityEngine.Vector3)verticalStep * j));
                 }
             }
         }
@@ -352,7 +352,7 @@ namespace Model
             this.setRadius(0.5f);
             this.setSpeed(10f);
             this.setAcceleration(100f);
-            this.setInterspace(1.0f * this.getRadius());
+            this.setInterspace(0.5f * this.getRadius());
         }
 
         public new virtual void update()
