@@ -14,8 +14,5 @@ public class _blueSoldier : MonoBehaviour {
 	
 	void Update () {
         this.view.update();
-
-
-        
 	}
 }

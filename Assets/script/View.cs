@@ -27,12 +27,12 @@ namespace View
             
         }
 
-        public void march(Model.Position destination)
+        public void march(Model.Rect rect)
         {
             //model.lineUp();
             //model.gather();
             //model.march(destination);
-            model.square(new Model.Rect(new Model.Position[]{new Model.Position(30,0,30), new Model.Position(30,0,50), new Model.Position(50,0,30), new Model.Position(50,0,50)}));
+            model.square(rect);
         }
 
         public void update()
